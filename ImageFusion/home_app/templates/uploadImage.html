@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block body %}
+{% if user.is_authenticated %}
+    <!-- body of home page -->
+
+        <!-- taking user input image(s) -->
+        <div class='container mt-5 p-3 rounded bg-warning'>
+            <form action='{% url 'upload_images' %}' method="POST">
+            {% csrf_token %}
+                <label for="inputGroupFile02" class='fw-bold fs-3'>Upload Image</label>
+                <input type="file" multiple class="form-control border-warning" id="inputGroupFile02" required>
+                <input type="submit" value="Upload" class="mt-1">
+            </form>
+        </div>
+        <!-- taking user input image(s) -->
+
+        <!-- -->
+
+    <!-- body of home page -->
+{% endif %}
+{% endblock body %}
