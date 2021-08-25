@@ -1,22 +1,60 @@
 {% extends 'index.html' %}
+{% load static %}
 
 {% block body %}
-{% if user.is_authenticated %}
-    <!-- body of home page -->
+    {% if user.is_authenticated %}
+        <!-- body of home page -->
 
-        <!-- taking user input image(s) -->
-        <div class='container mt-5 p-3 rounded bg-warning'>
-            <form action='{% url 'upload_images' %}' method="POST">
-            {% csrf_token %}
-                <label for="inputGroupFile02" class='fw-bold fs-3'>Upload Image</label>
-                <input type="file" multiple class="form-control border-warning" id="inputGroupFile02" required>
-                <input type="submit" value="Upload" class="mt-1">
-            </form>
-        </div>
-        <!-- taking user input image(s) -->
+            <!-- taking user input image(s) -->
+            <div class='container mt-5 p-3 rounded bg-warning'>
+                <form action='{% url 'upload_images' %}' method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                    {% comment %} <label for="username">Username</label> {% endcomment %}
+                    <input type="text" name="username" id="username" value={{user.username}} placeholder={{user.username}} hidden='true'>
+                    {% comment %} <label for="user_email">Email</label> {% endcomment %}
+                    <input type="email" name="user_email" id="user_email" value={{user.email}} placeholder={{user.email}} hidden>
+                    <label for="inputGroupFile02" class='fw-bold fs-3 mb-1'>Upload Images</label>
+                    <input type="file" multiple class="form-control border-warning" id="inputGroupFile02" name='images' required>
+                    <input type="submit" value="Upload" class="form-control mt-1 bg-success text-white fw-bold border-0 fs-5">
+                </form>
+            </div>
+            <!-- taking user input image(s) -->
 
-        <!-- -->
+            <!-- Display User uploaded Images -->
+            <div class='container mt-5 mb-5 p-3 rounded bg-warning'>
+                <div class='rounded fw-bold mb-1 fs-3 text-black'>Your Uploaded Images</div>
+                <div class='container p-3 rounded bg-white' style='height:530px; overflow:auto;'>
+                    {% if all_images %}
+                        <div class='row'>
+                            {% for i in all_images %}
+                                <div class='col-md-3 col-sm-6 col-12'>
+                                    <div class='card-img bg-dark p-1 m-1 rounded'>
+                                        <a href="{{i.images.url}}">
+                                            <img src="{{i.images.url}}" alt="Image" width='100%' height='100%' class="rounded">
+                                        </a>
+                                        <div class='card-footer text-white'>
+                                            <span class='bg-warning text-dark px-1 rounded'>Name</span>
+                                            <br/>
+                                            <span class='text-white px-1 rounded text-wrap'>{{i.images.name}}</span>
+                                            <br>
+                                            <span class='bg-warning text-dark px-1 rounded'>Size</span>
+                                            <br/>
+                                            <span class='text-white px-1 rounded text-wrap'>{{i.images.size}} bytes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class='container-fluid bg-danger text-white fs-4 fw-bold p-1 rounded'>
+                            <center>You should <span class='bg-white text-dark rounded px-1'>Upload Images !</span></center>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Display User uploaded Images -->
 
-    <!-- body of home page -->
-{% endif %}
+        <!-- body of home page -->
+    {% endif %}
 {% endblock body %}
+

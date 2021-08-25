@@ -152,7 +152,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_DIR = BASE_DIR / 'home_app/static'
+STATIC_DIR = BASE_DIR / 'static'
 STATICFILES_DIRS = [STATIC_DIR]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -165,4 +165,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # GOOGLE_CLIENT_SECRET = Hb_pg15QkrGD2yp3YQz7oOaS
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'home_app/static/media'
+MEDIA_ROOT = BASE_DIR / 'static/images'
