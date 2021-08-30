@@ -150,9 +150,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+# Pointing to Development Static Files
 STATIC_URL = '/static/'
-
 STATIC_DIR = BASE_DIR / 'static'
+
+# Creating and Pointing to Production Static Files
 STATICFILES_DIRS = [STATIC_DIR]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -161,8 +163,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Google Gmail API 
 # GOOGLE_CLIENT_ID = 149673853150-eo1p7nhm2fqr94vtm4m1891a16ld0eae.apps.googleusercontent.com
 # GOOGLE_CLIENT_SECRET = Hb_pg15QkrGD2yp3YQz7oOaS
 
+# Pointing to Media Files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'static/images'

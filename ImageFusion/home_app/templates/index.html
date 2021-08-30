@@ -20,6 +20,9 @@
     {% comment %} <link rel="icon" href="./../favicon.ico" type="image/x-icon"> {% endcomment %}
     <link rel="icon" href="{% static 'favicon.ico' %}">
 
+    <!-- reference your installed Font Awesome Free package's files here -->
+    <script src="{% static 'fontawesome-free-5.15.4-web/js/all.min.js' %}"></script>
+
     <title>Image Fusion</title>
 
     <style>
@@ -47,7 +50,7 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand">
                         <div class='bg-white text-success rounded p-1 fw-bold'>
                             <img src="{% static '/favicon.ico' %}" alt="Image Fusion Logo" height='50' width='50'/> 
                             Image Fusion
@@ -59,14 +62,17 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{% url 'home'%}"><span class="text-white bg-secondary p-1 rounded">Home</span></a>
+                                <a class="nav-link" aria-current="page" href="{% url 'home'%}"><span class="text-white bg-success p-1 rounded"> <i class="fas fa-home"></i> Home</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{% url 'upload_images' %}"><span class="text-white bg-secondary p-1 rounded" >Image Processing</span></a>
+                                <a class="nav-link" aria-current="page" href="{% url 'upload_images'%}"><span class="text-white bg-success p-1 rounded"> <i class="fas fa-images"></i> Upload Images</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="{% url 'image_processing' %}"><span class="text-white bg-success p-1 rounded" > <i class="fas fa-magic"></i> Image Processing</span></a>
                             </li>
                             {% if user.is_authenticated %}
                                 <li class="nav-item">
-                                    <a class="nav-link" aria-current="page"><span class='bg-success text-white p-1 rounded'>Welcome, {{user.username}}</span></a>
+                                    <a class="nav-link" aria-current="page"><span class='bg-success text-white p-1 rounded'> <i class="fas fa-user-circle"></i> {{user.username}}</span></a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" aria-current="page">
@@ -75,40 +81,18 @@
                                             {% if redirect_field_value %}
                                                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                                             {% endif %}
-                                            <input type="submit" class='bg-danger text-white rounded border-0' value='Logout' />
+                                            <button class='bg-danger text-white rounded border-0'>
+                                                <i class="fas fa-sign-out-alt"></i> Logout
+                                            </button>
                                         </form>
                                     </a>
                                 </li>
                             {% else %}
                                 <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="{% provider_login_url 'google' %}"><span class="text-white bg-danger p-1 rounded" ><i class="fa fa-google fa-fw"></i> Login with Google+</span></a>
+                                    <a class="nav-link" aria-current="page" href="{% provider_login_url 'google' %}"><span class="text-white bg-danger p-1 rounded" > <i class="fab fa-google"></i> Login with Google+</span></a>
                                 </li>
                             {% endif %}
-                            
-                            {% comment %} 
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Link</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Dropdown
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                            </li> 
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                            </li>
-                            {% endcomment %}
                         </ul>
-                        {% comment %} <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form> {% endcomment %}
                     </div>
                 </div>
             </nav>

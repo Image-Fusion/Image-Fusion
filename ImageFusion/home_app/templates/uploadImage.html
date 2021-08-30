@@ -3,15 +3,15 @@
 
 {% block body %}
     {% if user.is_authenticated %}
-        <!-- body of home page -->
+        <!-- body of uploadImage page -->
 
             <!-- taking user input image(s) -->
             <div class='container mt-5 p-3 rounded bg-warning'>
                 <form action='{% url 'upload_images' %}' method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                    {% comment %} <label for="username">Username</label> {% endcomment %}
+                    <!-- <label for="username">Username</label> -->
                     <input type="text" name="username" id="username" value={{user.username}} placeholder={{user.username}} hidden='true'>
-                    {% comment %} <label for="user_email">Email</label> {% endcomment %}
+                    <!-- <label for="user_email">Email</label> -->
                     <input type="email" name="user_email" id="user_email" value={{user.email}} placeholder={{user.email}} hidden>
                     <label for="inputGroupFile02" class='fw-bold fs-3 mb-1'>Upload Images</label>
                     <input type="file" multiple class="form-control border-warning" id="inputGroupFile02" name='images' required>
@@ -23,16 +23,22 @@
             <!-- Display User uploaded Images -->
             <div class='container mt-5 mb-5 p-3 rounded bg-warning'>
                 <div class='rounded fw-bold mb-1 fs-3 text-black'>Your Uploaded Images</div>
+                <div class='container p-2 my-2 rounded bg-white fs-5'> 
+                    <a href="{% url 'delete-all-images' %}" class='btn btn-danger badge'> <i class="fas fa-trash-alt"></i> Delete All</a>
+                </div>
                 <div class='container p-3 rounded bg-white' style='height:530px; overflow:auto;'>
                     {% if all_images %}
                         <div class='row'>
                             {% for i in all_images %}
                                 <div class='col-md-3 col-sm-6 col-12'>
-                                    <div class='card-img bg-dark p-1 m-1 rounded'>
+                                    <div class='card-img bg-dark p-2 m-1 rounded'>
+                                        <div>
+                                            <a href="{% url 'delete-image' i.id %}" class='btn btn-danger badge mb-1'><i class="fas fa-trash-alt"></i></a>
+                                        </div>
                                         <a href="{{i.images.url}}">
                                             <img src="{{i.images.url}}" alt="Image" width='100%' height='100%' class="rounded">
                                         </a>
-                                        <div class='card-footer text-white'>
+                                        <div class='text-white mt-1 '>
                                             <span class='bg-warning text-dark px-1 rounded'>Name</span>
                                             <br/>
                                             <span class='text-white px-1 rounded text-wrap'>{{i.images.name}}</span>
@@ -47,14 +53,14 @@
                         </div>
                     {% else %}
                         <div class='container-fluid bg-danger text-white fs-4 fw-bold p-1 rounded'>
-                            <center>You should <span class='bg-white text-dark rounded px-1'>Upload Images !</span></center>
+                            <center>You should <span class='bg-white text-danger rounded px-1'>Upload Images !</span></center>
                         </div>
                     {% endif %}
                 </div>
             </div>
             <!-- Display User uploaded Images -->
 
-        <!-- body of home page -->
+        <!-- body of uploadImage page -->
     {% endif %}
 {% endblock body %}
 
