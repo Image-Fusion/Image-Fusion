@@ -8,5 +8,5 @@ urlpatterns = [
     path('image_processing/', views.image_processing, name='image_processing'),
     path('delete_image/<str:pk>/', views.delete_image, name='delete-image'),
     path('delete_all_images/', views.delete_all_images, name='delete-all-images'),
-    # path('login/', views.login, name='login'),
+    path('image_fusion/', views.image_fusion, name='image-fusion'),
 ]
