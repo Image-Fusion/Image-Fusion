@@ -23,17 +23,8 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    
-] 
-
-urlpatterns = [
-    path(
-        "favicon.ico",
-        RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),
-    ),
+    path("favicon.ico", RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),),
     path('admin/', admin.site.urls),
     path('', include('home_app.urls')),
     path('accounts/', include('allauth.urls')),
-    # path('social-auth/', include('social_django.urls', namespace='social'))
-    # path('accounts/login/', ,name='login')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

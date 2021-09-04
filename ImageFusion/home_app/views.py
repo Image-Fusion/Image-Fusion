@@ -6,7 +6,11 @@ from django.contrib.auth.models import User
 from . models import UploadedImages
 from django.contrib import messages
 import os
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
+
 def home(request):
     return render(request, 'index.html')
 
