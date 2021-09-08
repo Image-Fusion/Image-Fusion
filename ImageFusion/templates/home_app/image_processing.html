@@ -7,94 +7,69 @@
             <!-- Display User uploaded Images -->
                 <div class='container mt-5 mb-5 p-3 rounded bg-warning'>
                     <div class='rounded fw-bold mb-1 fs-3 text-black'>Your Uploaded Images</div>
+                    <div class='container p-2 my-2 rounded bg-white fs-5'> 
+                        <div class='container pb-2 select_unselect_all_button'>
+                            <button type="button" onclick="SelectAll()" class='btn btn-success'>Select All Images</button>
+                            <button type="button" onclick="UnSelectAll()" class='btn btn-danger mx-1'>UnSelect All Images</button>
+                        </div>
+                        <div class='row  mb-2'>
+                            <div class="col-sm-9">
+                                <input class="image_fusion_search px-2" onkeyup="ImageSearchFunction()" id ="search" type="search" placeholder="Search Image" aria-label="Search">
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input switch_toggle" type="checkbox" value="" id="flexCheckChecked"  data-toggle="toggle"/>
+                                    <label class="form-check-label" for="flexCheckChecked">Select Searched Image</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <form action="{% url 'image-fusion' %}" method="POST">
                     {% csrf_token %}
                         <div class='container p-3 rounded bg-white' style='height:530px; overflow:auto;'>
                             {% if all_images %}
-                                {% comment %} <div class='row mx-auto'>
-                                    <div class='p-2 rounded bg-white fs-5'> 
-                                        <label for="select_all">
-                                            <input type="checkbox" id="select_all"/> Select All Images
-                                        </label>
-                                    </div>
-                                </div>  {% endcomment %}
-                                <div class='container  pb-2 '>
-                                    <button type="button" onclick="SelectAll()" class='bg-dark text-white rounded border-0 px-2 py-1'>Select all Images</button>
-                                    <button type="button" onclick="UnSelectAll()" class='bg-dark text-white rounded border-0 px-2 py-1'>UnSelect all Images</button>
-                                </div>
-                                <div class='row'>
-                                    <div class="col">
-                                        <input class="form-control" onkeyup="SearchFunction()" id ="search" type="search" placeholder="Search" aria-label="Search">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                                            <label class="form-check-label" for="flexCheckChecked">
-                                                Select Searched Image
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                
                                 <div class='row'>
                                     {% for i in all_images %}
-                                            <div class='col-md-3 col-sm-6 col-12 photo' >
-                                                <div class='card-img bg-dark p-2 m-1 rounded'>
-                                                    <div>
-                                                        <input type="checkbox" name="image_checkbox" value="{{i.id}}" id="{{i.id}}">
-                                                    </div>
+                                        <div class='col-md-3 col-sm-6 col-12 photo my-2'>
+                                            <!-- Card -->
+                                                <div class="card bg-dark " >
                                                     <a href="{{i.images.url}}">
-                                                        <img src="{{i.images.url}}" alt="Image" width='100%' height='100%' class="rounded">
+                                                        <img src="{{i.images.url}}" class="card-img-top" alt="{{i.images.name}}"/>
                                                     </a>
-                                                    <div class='text-white mt-1 '>
-                                                        <span class='bg-warning text-dark px-1 rounded'>Name</span>
-                                                        <br/>
-                                                        <span class='text-white px-1 rounded text-wrap photoName'>{{i.images.name}}</span>
+                                                    <div class="card-body">
+                                                        <div class='text-white mt-1 '>
+                                                            <div class="row mb-3">
+                                                                <div class="col ">
+                                                                    <div class="form-check form-switch">
+                                                                        <input name="image_checkbox" class="form-check-input switch_toggle" type="checkbox" value="{{i.id}}" id="{{i.id}}"  data-toggle="toggle"/>
+                                                                        <label class="form-check-label" for="flexCheckChecked">Checkbox</label>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="row my-1">
+                                                                <div class="col-auto">
+                                                                    <span class="bg-light text-dark rounded px-1">Name</span>
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                    <span class="text-white photoName">{{i.images.name}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            <!-- Card -->
+                                        </div>
                                     {% endfor %}
                                 </div>
-                                <script>
-                                    function SelectAll(){
-                                        var CheckBox = document.getElementsByName("image_checkbox");
-                                        for(i = 0; i < CheckBox.length; i++){
-                                            CheckBox[i].checked = true;
-                                        }
-                                    }
-                                    function UnSelectAll(){
-                                        var CheckBox = document.getElementsByName("image_checkbox");
-                                        for(i = 0; i < CheckBox.length; i++){
-                                            CheckBox[i].checked = false;
-                                        }
-                                    }
-                                    function SearchFunction(){
-                                        var filter = document.getElementById('search').value.toUpperCase();
-                                        var CardElement = document.getElementsByClassName('photo');
-                                        var PhotoNameElement = document.getElementsByClassName('photoName');
-                                        var CheckBox = document.getElementsByName("image_checkbox");
-                                        var SelectSearched = document.getElementById('flexCheckChecked').checked;
-                                        for(i = 0; i < CardElement.length; i++){
-                                            var PhotoName = PhotoNameElement[i].innerText.toUpperCase();
-                                            if(PhotoName.indexOf(filter)>-1){
-                                                CardElement[i].style.display = "";
-                                                if (SelectSearched&&filter!=""){
-                                                    CheckBox[i].checked = true;
-                                                }
-                                            }else{
-                                                CardElement[i].style.display = "none";
-                                            }
-                                        }
-                                    }
-                                </script>
                             {% else %}
                                 <div class='container-fluid bg-danger text-white fs-4 fw-bold p-1 rounded'>
                                     <center>You should <span class='bg-white text-danger rounded px-1'>Upload Images !</span></center>
                                 </div>
                             {% endif %}
                         </div>
-                        <div class='container  bg-white d-grid gap-2 mt-3 p-3'>
-                            <button type="submit" class='btn btn-outline-dark'>Start Image Fusion</button>
+                        <div class='container bg-white d-grid gap-2 mt-3 p-3 rounded'>
+                            <button type="submit" class='btn btn-success'>Start Image Fusion</button>
                         </div>
                     </form>
                 </div>

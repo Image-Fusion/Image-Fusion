@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'index.html')
 
+@login_required
 def upload_images(request):
     if not request.user.is_authenticated:
         return redirect('/')
@@ -39,6 +40,7 @@ def upload_images(request):
 def login(request):
     return render(request, 'login.html')
 
+@login_required
 def delete_image(request, pk):
     if not request.user.is_authenticated:
         return redirect('/')
@@ -50,6 +52,7 @@ def delete_image(request, pk):
         messages.success(request, 'Image Deleted Successfully !')
         return redirect('/upload_images/')
     
+@login_required
 def delete_all_images(request):
     if not request.user.is_authenticated:
         return redirect('/')
@@ -62,6 +65,7 @@ def delete_all_images(request):
         messages.success(request, 'All Images Deleted Successfully !')
         return redirect('/upload_images')
 
+@login_required
 def image_processing(request):
     if not request.user.is_authenticated:
         return redirect('/')
@@ -80,6 +84,7 @@ def image_processing(request):
         else:
             pass
 
+@login_required
 def image_fusion(request):
     if not request.user.is_authenticated:
         return redirect('/')

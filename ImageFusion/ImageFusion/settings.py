@@ -152,11 +152,7 @@ USE_TZ = True
 
 # Pointing to Development Static Files
 STATIC_URL = '/static/'
-STATIC_DIR = BASE_DIR / 'static'
-
-# Creating and Pointing to Production Static Files
-STATICFILES_DIRS = [STATIC_DIR]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -170,3 +166,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Pointing to Media Files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'static/images'
+
+# @login_required will point to this url for signing in the user
+LOGIN_URL = '/accounts/google/login/'
