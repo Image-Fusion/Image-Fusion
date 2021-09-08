@@ -26,7 +26,7 @@
                     </div>
                     <form action="{% url 'image-fusion' %}" method="POST">
                     {% csrf_token %}
-                        <div class='container p-3 rounded bg-white' style='height:530px; overflow:auto;'>
+                        <div class='container p-3 rounded bg-white' style='height:100vh; overflow:auto;'>
                             {% if all_images %}
                                 <div class='row'>
                                     {% for i in all_images %}
@@ -42,7 +42,7 @@
                                                                 <div class="col ">
                                                                     <div class="form-check form-switch">
                                                                         <input name="image_checkbox" class="form-check-input switch_toggle" type="checkbox" value="{{i.id}}" id="{{i.id}}"  data-toggle="toggle"/>
-                                                                        <label class="form-check-label" for="flexCheckChecked">Checkbox</label>
+                                                                        <label class="form-check-label" for="{{i.id}}">Select</label>
                                                                     </div>
                                                                 </div>
                                                                 
