@@ -29,8 +29,13 @@
                 <div class='container p-3 rounded bg-white' style='height:530px; overflow:auto;'>
                     {% if all_images %}
                         <div class='row'>
+                            <div class="col">
+                                <input class="form-control  " onkeyup="SearchFunction()" id ="search" type="search" placeholder="Search" aria-label="Search">
+                            </div>    
+                        </div>
+                        <div class='row'>
                             {% for i in all_images %}
-                                <div class='col-md-3 col-sm-6 col-12'>
+                                <div class='col-md-3 col-sm-6 col-12 photo'>
                                     <div class='card-img bg-dark p-2 m-1 rounded'>
                                         <div>
                                             <a href="{% url 'delete-image' i.id %}" class='btn btn-danger badge mb-1'><i class="fas fa-trash-alt"></i></a>
@@ -41,7 +46,7 @@
                                         <div class='text-white mt-1 '>
                                             <span class='bg-warning text-dark px-1 rounded'>Name</span>
                                             <br/>
-                                            <span class='text-white px-1 rounded text-wrap'>{{i.images.name}}</span>
+                                            <span class='text-white px-1 rounded text-wrap photoName'>{{i.images.name}}</span>
                                             <br>
                                             <span class='bg-warning text-dark px-1 rounded'>Size</span>
                                             <br/>
@@ -51,6 +56,21 @@
                                 </div>
                             {% endfor %}
                         </div>
+                        <script>
+                            function SearchFunction(){
+                                var filter = document.getElementById('search').value.toUpperCase();
+                                var CardElement = document.getElementsByClassName('photo');
+                                var PhotoNameElement = document.getElementsByClassName('photoName');
+                                for(i = 0; i < CardElement.length; i++){
+                                    var PhotoName = PhotoNameElement[i].innerText.toUpperCase();
+                                    if(PhotoName.indexOf(filter)>-1){
+                                        CardElement[i].style.display = "";
+                                    }else{
+                                        CardElement[i].style.display = "none";
+                                    }
+                                }
+                            }
+                        </script>
                     {% else %}
                         <div class='container-fluid bg-danger text-white fs-4 fw-bold p-1 rounded'>
                             <center>You should <span class='bg-white text-danger rounded px-1'>Upload Images !</span></center>
