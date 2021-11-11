@@ -44,3 +44,21 @@ function ImageSearchFunction(){
         }
     }
 }
+
+function validateFileType(){
+    var fileName = document.getElementById("fileName").value;
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    if (extFile=="png"){
+        //
+    }else{
+        fileName = "";
+        alert("Only PNG files are allowed !");
+    }   
+}
+
+var file = $("#fileName");
+file.removeAttr('src');
+var fileClone = file.clone();
+fileClone.insertAfter(file);
+file.remove();
