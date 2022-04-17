@@ -1,0 +1,9 @@
+{% load static %}
+
+{% if user.is_authenticated %}
+
+{% else %}
+    <div class='container-fluid bg-warning text-dark fs-4 fw-bold p-1'>
+        <center>You should <span class='bg-white text-dark rounded px-1'>Sign In</span> to view this page !!!</center>
+    </div>
+{% endif %}

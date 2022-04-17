@@ -24,9 +24,9 @@
                             </div>
                         </div>
                     </div>
-                    <form id="form_image_fusion" action="{% url 'image-fusion' %}" method="POST">
-                    {% csrf_token %}
-                        <div class='container p-3 rounded bg-white' style='height:100vh; overflow:auto;'>
+                    <div class='container p-3 rounded bg-white' style='height:100vh; overflow:auto;'>
+                        <form data-name="image_processing_form" id="form_image_fusion" method="POST">
+                            {% csrf_token %}
                             {% if all_images %}
                                 <div class='row'>
                                     {% for i in all_images %}
@@ -67,25 +67,61 @@
                                     <center>You should <span class='bg-white text-danger rounded px-1'>Upload Images !</span></center>
                                 </div>
                             {% endif %}
+                        </form>
+                    </div>
+                    <div class='container bg-white d-grid gap-2 mt-3 p-3 rounded'>
+                        <div class="row">
+                            <div class='rounded fw-bold mb-1 fs-3 text-dark col-12 d-flex justify-content-center'>Image Fusion</div>
+                            <div class="col-auto">
+                                <button class='btn btn-success' id="button_image_fusion_avg_min_max">
+                                    <span id="start_image_fusion_avg_min_max">Average, Minimum, Maximum</span>
+                                    <span id="loading_image_fusion_avg_min_max" class="visually-hidden">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Loading...
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="col-auto">
+                                <button class='btn btn-success' id="button_image_fusion_wavelet">
+                                    <span id="start_image_fusion_wavelet">Wavelet</span>
+                                    <span id="loading_image_fusion_wavelet" class="visually-hidden">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Loading...
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="col-auto">
+                                <button class='btn btn-success' id="button_image_fusion_gcf">
+                                    <span id="start_image_fusion_gcf">Gaussian Curvature Filter</span>
+                                    <span id="loading_image_fusion_gcf" class="visually-hidden">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Loading...
+                                    </span>
+                                </button>
+                            </div>
+                            <div class='rounded fw-bold my-3 fs-3 text-dark col-12 d-flex justify-content-center'>Feature Matching</div>
+                            <div class="col-auto">
+                                <button class='btn btn-success' id="button_image_fusion_sift_matching">
+                                    <span id="start_image_fusion_sift_matching">SIFT</span>
+                                    <span id="loading_image_fusion_sift_matching" class="visually-hidden">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Loading...
+                                    </span>
+                                </button>
+                            </div>
                         </div>
-                        <div class='container bg-white d-grid gap-2 mt-3 p-3 rounded'>
-                            <button type="submit" class='btn btn-success' id="button_image_fusion">
-                                <span id="start_image_fusion">Start Image Fusion</span>
-                                <span id="loading_image_fusion" class="visually-hidden">
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    Loading...
-                                </span>
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             <!-- Display User uploaded Images -->
 
             <!-- Display Fused Image -->
             {% if fused_image %}
                 <div class='container mt-5 mb-5 p-3 rounded bg-warning'>
-                    <div class='rounded fw-bold mb-1 fs-3 text-black'>Fused Image</div>
-                    
+                    {% if avg_min_max or wavelet or gaussian_curvature_filter %}
+                        <div class='rounded fw-bold mb-1 fs-3 text-black'>Fused Image</div>
+                    {% else %}
+                        <div class='rounded fw-bold mb-1 fs-3 text-black'>Feature Matching</div>
+                    {% endif %}
                     <div class='container py-2 my-3 rounded bg-white'>
                         {% if fused_image %}
                             <div class='row'>
@@ -146,128 +182,203 @@
                         {% endif %}
                     </div>
 
-                    <div class='container py-3 my-3 rounded bg-white' >
-                        {% if fused_image %}
-                            <div class='row'>
-
-                                <div class='rounded fw-bold mb-1 fs-3 text-dark col-12 d-flex justify-content-center'>Output Images</div>
-                                <!-- Wavelet -->
-                                <div class='col-md-3 col-sm-6 col-12 photo my-2'>
-                                    <!-- Card -->
-                                        <div class="card bg-dark " >
-                                            <a href="{% static 'temporary/images/wavelet.png' %}">
-                                                <img src="{% static 'temporary/images/wavelet.png' %}" class="card-img-top" alt="Wavelet Image"/>
-                                            </a>
-                                            <div class="card-body">
-                                                <div class='text-white mt-1 '>
-                                                    <div class="row mb-3">
-                                                        
-                                                    </div>
-                                                    <div class="row my-1">
-                                                        <div class="col-auto">
-                                                            <span class="bg-light text-dark rounded px-1">Name</span>
+                    {% if avg_min_max or wavelet or gaussian_curvature_filter %}
+                        <div class='container py-3 my-3 rounded bg-white' >
+                            {% if fused_image %}
+                                <div class='row'>
+                                    <div class='rounded fw-bold mb-1 fs-3 text-dark col-12 d-flex justify-content-center'>
+                                        {% if avg_min_max_result or wavelet or sift_matching or gaussian_curvature_filter %}
+                                            Output Image{% if avg_min_max %}s{% endif %}
+                                        {% endif %}
+                                    </div>
+                                    {% if wavelet %}
+                                        <!-- Wavelet -->
+                                        <div class='col-md-3 col-sm-6 col-12 photo my-2'>
+                                            <!-- Card -->
+                                                <div class="card bg-dark " >
+                                                    <a href="{% static 'temporary/images/wavelet.png' %}">
+                                                        <img src="{% static 'temporary/images/wavelet.png' %}" class="card-img-top" alt="Wavelet Image"/>
+                                                    </a>
+                                                    <div class="card-body">
+                                                        <div class='text-white mt-1 '>
+                                                            <div class="row mb-3">
+                                                                
+                                                            </div>
+                                                            <div class="row my-1">
+                                                                <div class="col-auto">
+                                                                    <span class="bg-light text-dark rounded px-1">Name</span>
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                    <span class="text-white photoName">Wavelet.png</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-auto">
-                                                            <span class="text-white photoName">Wavelet.png</span>
+                                                    </div>
+                                                </div>
+                                            <!-- Card -->
+                                        </div>
+                                    {% endif %}
+                                    {% if avg_min_max %}
+                                        {% if avg_min_max_result %}
+                                            <!-- Average -->
+                                            <div class='col-md-3 col-sm-6 col-12 photo my-2'>
+                                                <!-- Card -->
+                                                    <div class="card bg-dark " >
+                                                        <a href="{% static 'temporary/images/avg.png' %}">
+                                                            <img src="{% static 'temporary/images/avg.png' %}" class="card-img-top" alt="Average Image"/>
+                                                        </a>
+                                                        <div class="card-body">
+                                                            <div class='text-white mt-1 '>
+                                                                <div class="row mb-3">
+                                                                    
+                                                                </div>
+                                                                <div class="row my-1">
+                                                                    <div class="col-auto">
+                                                                        <span class="bg-light text-dark rounded px-1">Name</span>
+                                                                    </div>
+                                                                    <div class="col-auto">
+                                                                        <span class="text-white photoName">Average.png</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <!-- Card -->
+                                            </div>
+
+                                            <!-- Minimum -->
+                                            <div class='col-md-3 col-sm-6 col-12 photo my-2'>
+                                                <!-- Card -->
+                                                    <div class="card bg-dark " >
+                                                        <a href="{% static 'temporary/images/min.png' %}">
+                                                            <img src="{% static 'temporary/images/min.png' %}" class="card-img-top" alt="Minimum Image"/>
+                                                        </a>
+                                                        <div class="card-body">
+                                                            <div class='text-white mt-1 '>
+                                                                <div class="row mb-3">
+                                                                    
+                                                                </div>
+                                                                <div class="row my-1">
+                                                                    <div class="col-auto">
+                                                                        <span class="bg-light text-dark rounded px-1">Name</span>
+                                                                    </div>
+                                                                    <div class="col-auto">
+                                                                        <span class="text-white photoName">Minimum.png</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <!-- Card -->
+                                            </div>
+
+                                            <!-- Maximum -->
+                                            <div class='col-md-3 col-sm-6 col-12 photo my-2'>
+                                                <!-- Card -->
+                                                    <div class="card bg-dark " >
+                                                        <a href="{% static 'temporary/images/max.png' %}">
+                                                            <img src="{% static 'temporary/images/max.png' %}" class="card-img-top" alt="Maximum Image"/>
+                                                        </a>
+                                                        <div class="card-body">
+                                                            <div class='text-white mt-1 '>
+                                                                <div class="row mb-3">
+                                                                    
+                                                                </div>
+                                                                <div class="row my-1">
+                                                                    <div class="col-auto">
+                                                                        <span class="bg-light text-dark rounded px-1">Name</span>
+                                                                    </div>
+                                                                    <div class="col-auto">
+                                                                        <span class="text-white photoName">Maximum.png</span>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- <div class="row my-1">
+                                                                    <button class="btn btn-success">
+                                                                        <a href="">Download
+                                                                    </button>
+                                                                </div>
+                                                                -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <!-- Card -->
+                                            </div>
+                                        {% else %}
+                                            <div class='col-12my-2 fs-3 fw-bold text-danger text-center'>
+                                                Images are of different sizes.
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if gaussian_curvature_filter %}
+                                        <!-- Gaussian Curvature Filter -->
+                                        <div class='col-md-3 col-sm-6 col-12 photo my-2'>
+                                            <!-- Card -->
+                                                <div class="card bg-dark " >
+                                                    <a href="{% static 'temporary/images/gcf.png' %}">
+                                                        <img src="{% static 'temporary/images/gcf.png' %}" class="card-img-top" alt="Gaussian Curvature Filter Image"/>
+                                                    </a>
+                                                    <div class="card-body">
+                                                        <div class='text-white mt-1 '>
+                                                            <div class="row mb-3">
+                                                                
+                                                            </div>
+                                                            <div class="row my-1">
+                                                                <div class="col-auto">
+                                                                    <span class="bg-light text-dark rounded px-1">Name</span>
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                    <span class="text-white photoName">Gaussian_Curvature_Filter.png</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- Card -->
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class='container-fluid bg-warning text-dark fs-4 fw-bold p-1 rounded'>
+                                    <center>You should <span class='bg-white text-dark rounded px-1'>SELECT IMAGES</span> for Image Fusion !!!</center>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if sift_matching %}
+                        <div class='container py-3 my-3 rounded bg-white' >
+                            {% if fused_image %}
+                                <div class='row'>
+                                    <div class='rounded fw-bold mb-1 fs-3 text-dark col-12 d-flex justify-content-center'>Feature Matching with SIFT</div>
+                                    <!-- SIFT -->
+                                    <div class='col-12 photo my-2'>
+                                        <!-- Card -->
+                                            <div class="card bg-dark " >
+                                                <a href="{% static 'temporary/images/match_sift.png' %}">
+                                                    <img src="{% static 'temporary/images/match_sift.png' %}" class="card-img-top" alt="SIFT Image"/>
+                                                </a>
+                                                <div class="card-body">
+                                                    <div class='text-white mt-1 '>
+                                                        <div class="row mb-3">
+                                                            
+                                                        </div>
+                                                        <div class="row my-1">
+                                                            <div class="col-auto">
+                                                                <span class="bg-light text-dark rounded px-1">Name</span>
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <span class="text-white photoName">SIFT.png</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    <!-- Card -->
+                                        <!-- Card -->
+                                    </div>
                                 </div>
-
-                                <!-- Average -->
-                                <div class='col-md-3 col-sm-6 col-12 photo my-2'>
-                                    <!-- Card -->
-                                        <div class="card bg-dark " >
-                                            <a href="{% static 'temporary/images/avg.png' %}">
-                                                <img src="{% static 'temporary/images/avg.png' %}" class="card-img-top" alt="Average Image"/>
-                                            </a>
-                                            <div class="card-body">
-                                                <div class='text-white mt-1 '>
-                                                    <div class="row mb-3">
-                                                        
-                                                    </div>
-                                                    <div class="row my-1">
-                                                        <div class="col-auto">
-                                                            <span class="bg-light text-dark rounded px-1">Name</span>
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <span class="text-white photoName">Average.png</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <!-- Card -->
-                                </div>
-
-                                <!-- Minimum -->
-                                <div class='col-md-3 col-sm-6 col-12 photo my-2'>
-                                    <!-- Card -->
-                                        <div class="card bg-dark " >
-                                            <a href="{% static 'temporary/images/min.png' %}">
-                                                <img src="{% static 'temporary/images/min.png' %}" class="card-img-top" alt="Minimum Image"/>
-                                            </a>
-                                            <div class="card-body">
-                                                <div class='text-white mt-1 '>
-                                                    <div class="row mb-3">
-                                                        
-                                                    </div>
-                                                    <div class="row my-1">
-                                                        <div class="col-auto">
-                                                            <span class="bg-light text-dark rounded px-1">Name</span>
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <span class="text-white photoName">Minimum.png</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <!-- Card -->
-                                </div>
-
-                                <!-- Maximum -->
-                                <div class='col-md-3 col-sm-6 col-12 photo my-2'>
-                                    <!-- Card -->
-                                        <div class="card bg-dark " >
-                                            <a href="{% static 'temporary/images/max.png' %}">
-                                                <img src="{% static 'temporary/images/max.png' %}" class="card-img-top" alt="Maximum Image"/>
-                                            </a>
-                                            <div class="card-body">
-                                                <div class='text-white mt-1 '>
-                                                    <div class="row mb-3">
-                                                        
-                                                    </div>
-                                                    <div class="row my-1">
-                                                        <div class="col-auto">
-                                                            <span class="bg-light text-dark rounded px-1">Name</span>
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <span class="text-white photoName">Maximum.png</span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- <div class="row my-1">
-                                                        <button class="btn btn-success">
-                                                            <a href="">Download
-                                                        </button>
-                                                    </div>
-                                                    -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <!-- Card -->
-                                </div>
-
-                            </div>
-                        {% else %}
-                            <div class='container-fluid bg-warning text-dark fs-4 fw-bold p-1 rounded'>
-                                <center>You should <span class='bg-white text-dark rounded px-1'>SELECT IMAGES</span> for Image Fusion !!!</center>
-                            </div>
-                        {% endif %}
-                    </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 </div>
             {% endif %}
             <!-- Display Fused Image -->
